@@ -116,6 +116,7 @@ header>div:last-child {
   align-items: center;
   padding: 7px 5px;
   border-bottom: 1px solid;
+  margin-bottom: 20px;
 }
 
 .activity>div:first-child {
@@ -165,6 +166,7 @@ header>div:last-child {
   box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
   width: 190px;
 }
+
 .bracket{
   z-index: 2;
   position: fixed;
@@ -192,6 +194,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: 3;
   position: relative;
   background-color: white;
+  border-radius: 10px;
   color: black;
   padding: 20px 30px;
 }

@@ -3,51 +3,93 @@ var open = document.querySelector('.add-todo-trigger-button')
 var brack = document.querySelector('.bracket')
 
 open.addEventListener('click', () => {
-  document.querySelector('.add-task-modal').style.display='grid'
+  document.querySelector('.add-task-modal').style.display = 'grid'
 })
 
 close.addEventListener('click', () => {
-  document.querySelector('.add-task-modal').style.display='none'
+  document.querySelector('.add-task-modal').style.display = 'none'
 })
 
 
 brack.addEventListener('click', () => {
-  document.querySelector('.add-task-modal').style.display='none'
+  document.querySelector('.add-task-modal').style.display = 'none'
 })
 
+const allTask = JSON.parse(window.localStorage.getItem("tasks"))
 
-var persons = ["Dara", "Ahmed", "AZ", "Cent", "BJ"]
-var d = ["Cent"]
-var obj = {}
+const getTaskByCatg = (catg) => {
+  var tasks = allTask.filter(task => {
+    return task.category === catg
+  })
+  var activities = ``;
 
-var studyTasks = [
-  {name: "Learn Html", catg: 'study', from: '12/09', to: '16/09'},
-  {name: "Learn Html", catg: 'study', from: '12/09', to: '16/09'},
-  {name: "Learn Css", catg: 'study', from: '12/09', to: '16/09'},
-  {name: "Learn Css", catg: 'study', from: '12/09', to: '16/09'},
-  {name: "Learn Css", catg: 'study', from: '12/09', to: '16/09'},
-  {name: "Learn Sass", catg: 'study', from: '12/09', to: '16/09'},
-  {name: "Learn JavaScript", catg: 'study', from: '12/09', to: '16/09'},
-  {name: "Learn PHP", catg: 'study', from: '12/09', to: '16/09'},
-]
-var activities = ``;
-
-studyTasks.forEach(task => {
-  activities += `
-  <div class="activity">
+  tasks.forEach((task, index) => {
+    activities +=
+      `<div class="activity">
   <div>
     <div class="fa fa-circle"></div>
     <div>
-      <div class="">${task.name}</div>
+      <div class="">${task.task}</div>
       <div class="date">From ${task.from} | To ${task.to}</div>
     </div>
   </div>
 
   <div>
-    <input type="checkbox" name="done" id="">
+    <input type="checkbox" name="done" id="task_${index + 1}">
   </div>
-</div>
-  `
-});
+</div>`
+  });
+
+  const recentActivitiesCont = document.querySelector('.recent-activities-cont')
+  if (activities) {
+    recentActivitiesCont.innerHTML = activities
+  }
+  // return tasks
+}
+
+getTaskByCatg("study")
+
+const addModal = document.querySelector('.add-task-modal')
+
+addModal.addEventListener("submit", (e) => {
+  e.preventDefault();
   
-document.querySelector('.recent-activities-cont').innerHTML=activities
+  var tasks = []
+  
+  const allTask = JSON.parse(window.localStorage.getItem("tasks"))
+  
+  if (allTask) {
+    allTask.forEach(task => {
+      tasks.push(task)
+    })
+  }
+  
+  const formData = new FormData(addModal);
+  const task = formData.get('task')
+  const category = formData.get('category')
+  const from = formData.get('from')
+  const to = formData.get('to')
+
+  const newTask = {
+    task: task, 
+    category: category, 
+    from: from, 
+    to: to
+  }
+  
+  tasks.push(newTask)
+
+  window.localStorage.setItem("tasks", JSON.stringify(tasks));
+  window.location.reload()
+})
+
+
+const catgs = document.querySelectorAll('.catg')
+
+catgs.forEach(catg => {
+  catg.addEventListener('click', (e)=>{
+    const catgName = (e.target.textContent).toLowerCase()
+    // console.log(catgName)
+    getTaskByCatg(catgName)
+  })
+})
